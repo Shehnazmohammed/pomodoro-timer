@@ -1,51 +1,69 @@
-let timeLeft = 1500; // 25 minutes
-let timer;
-let isRunning = false;
-let cycle = 1;
+document.addEventListener("DOMContentLoaded", () => {
+  let timeLeft = 1500; // default to Pomodoro
+  let timer;
+  let isRunning = false;
+  let currentMode = 'pomodoro';
 
-const timerDisplay = document.getElementById("timer");
-const cycleDisplay = document.getElementById("cycle");
+  const timerDisplay = document.getElementById("timer");
+  const modeLabel = document.getElementById("modeLabel");
+  const pomodoroBtn = document.getElementById("pomodoroBtn");
+  const shortBreakBtn = document.getElementById("shortBreakBtn");
 
-function formatTime(seconds) {
-  const mins = Math.floor(seconds / 60);
-  const secs = seconds % 60;
-  return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-}
-
-function updateDisplay() {
-  timerDisplay.textContent = formatTime(timeLeft);
-}
-
-function startTimer() {
-  if (!isRunning) {
-    isRunning = true;
-    timer = setInterval(() => {
-      if (timeLeft > 0) {
-        timeLeft--;
-        updateDisplay();
-      } else {
-        clearInterval(timer);
-        isRunning = false;
-        alert("Pomodoro complete! ✨");
-        cycle++;
-        cycleDisplay.textContent = cycle;
-        timeLeft = 1500;
-        updateDisplay();
-      }
-    }, 1000);
+  function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
   }
-}
 
-function pauseTimer() {
-  clearInterval(timer);
-  isRunning = false;
-}
+  function updateDisplay() {
+    timerDisplay.textContent = formatTime(timeLeft);
+  }
 
-function resetTimer() {
-  clearInterval(timer);
-  isRunning = false;
-  timeLeft = 1500;
+  function startTimer() {
+    if (!isRunning) {
+      isRunning = true;
+      timer = setInterval(() => {
+        if (timeLeft > 0) {
+          timeLeft--;
+          updateDisplay();
+        } else {
+          clearInterval(timer);
+          isRunning = false;
+          alert(currentMode === 'pomodoro' ? "Pomodoro complete! ✨" : "Break over! ⏰");
+          resetTimer();
+        }
+      }, 1000);
+    }
+  }
+
+  function pauseTimer() {
+    clearInterval(timer);
+    isRunning = false;
+  }
+
+  function resetTimer() {
+    clearInterval(timer);
+    isRunning = false;
+    timeLeft = currentMode === 'pomodoro' ? 1500 : 300;
+    updateDisplay();
+  }
+
+  window.setMode = function(mode) {
+    currentMode = mode;
+    timeLeft = mode === 'pomodoro' ? 1500 : 300;
+    updateDisplay();
+    modeLabel.textContent = mode === 'pomodoro' ? "Time to focus!" : "Take a short break!";
+
+    pomodoroBtn.classList.remove('active');
+    shortBreakBtn.classList.remove('active');
+    document.getElementById(mode + 'Btn').classList.add('active');
+
+    pauseTimer();
+  };
+
+  window.startTimer = startTimer;
+  window.pauseTimer = pauseTimer;
+  window.resetTimer = resetTimer;
+
   updateDisplay();
-}
-
-updateDisplay(); // on load
+});
