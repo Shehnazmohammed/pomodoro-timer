@@ -9,16 +9,20 @@
 <body>
 
   <h1 class="main-heading">Pomodoro Timer</h1>
-  <p class="focus-text">Time to focus!</p>
 
   <div class="container">
+    <div class="mode-buttons">
+      <button id="pomodoroBtn" class="active" onclick="setMode('pomodoro')">Pomodoro</button>
+      <button id="shortBreakBtn" onclick="setMode('shortBreak')">Short Break</button>
+    </div>
+
     <div id="timer">25:00</div>
     <div class="buttons">
       <button onclick="startTimer()">Start</button>
-      <button onclick="pauseTimer()">Pause</button>
       <button onclick="resetTimer()">Reset</button>
     </div>
-     </div>
+  </div>
+<p class="focus-text" id="modeLabel">Time to focus!</p>
 
   <script src="script.js"></script>
 </body>
