@@ -52,7 +52,6 @@ document.addEventListener("DOMContentLoaded", () => {
     currentMode = mode;
     timeLeft = mode === 'pomodoro' ? 1500 : 300;
     updateDisplay();
-    modeLabel.textContent = mode === 'pomodoro' ? "Time to focus!" : "Take a short break!";
 
     pomodoroBtn.classList.remove('active');
     shortBreakBtn.classList.remove('active');
@@ -67,3 +66,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
   updateDisplay();
 });
+
